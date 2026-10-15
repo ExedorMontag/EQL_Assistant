@@ -8,6 +8,7 @@ import { E2E } from './e2e'
 // verbatim, resolve nothing, and have no module-scope side effects — so importing them here
 // cannot disturb the first-import law that puts channel.ts ahead of electron-store.
 import { logConsoleError, logInfo } from './errorLog'
+import { seedFromUpstream } from './upstreamSeed'
 
 /**
  * CHANNEL ISOLATION (Task #58) — the FIRST module index.ts imports.
@@ -24,8 +25,13 @@ import { logConsoleError, logInfo } from './errorLog'
  * `app.getPath('userData')` — nothing in the codebase hardcodes a path, so redirecting the
  * root redirects every consumer):
  *
- *   prod (app.isPackaged)  → %APPDATA%\everquest-companion
- *   dev  (!isPackaged)     → %APPDATA%\everquest-companion-dev
+ *   prod (app.isPackaged)  → %APPDATA%\eql-assistant
+ *   dev  (!isPackaged)     → %APPDATA%\eql-assistant-dev
+ *
+ * EQL Assistant is a fork of EQ Legends Companion, whose dirs were `everquest-companion` and
+ * `everquest-companion-dev`. The fork's dirs are its OWN, so both apps can be installed at once;
+ * on first launch the fork COPIES the original app's state (upstreamSeed.ts), and falls back
+ * to the even older `eq-tools` seed below only when there is no original-app dir.
  *   e2e  (EQ_E2E=1)        → a throwaway temp dir (wiped per run by the harness)
  *
  * Distinct dirs ⇒ distinct single-instance locks (Chromium's ProcessSingleton keys its
@@ -43,8 +49,10 @@ import { logConsoleError, logInfo } from './errorLog'
 export type AppChannel = 'prod' | 'dev' | 'e2e'
 
 /** userData dir names, relative to `app.getPath('appData')` (%APPDATA% on Windows). */
-const PROD_DIR_NAME = 'everquest-companion'
-const DEV_DIR_NAME = 'everquest-companion-dev'
+const PROD_DIR_NAME = 'eql-assistant'
+const DEV_DIR_NAME = 'eql-assistant-dev'
+/** The ORIGINAL app's prod dir (EQ Legends Companion). Read once, never written. */
+const UPSTREAM_DIR_NAME = 'everquest-companion'
 /** Pre-rename shared dir (product was "eq-tools"); source of the one-time seed. */
 const LEGACY_DIR_NAME = 'eq-tools'
 
@@ -115,6 +123,16 @@ function resolveUserData(): string {
   }
   const base = app.getPath('appData')
   const target = join(base, CHANNEL === 'prod' ? PROD_DIR_NAME : DEV_DIR_NAME)
+  const upstream = join(base, UPSTREAM_DIR_NAME)
+  const fromUpstream = seedFromUpstream(target, upstream, (entry, err) => {
+    logConsoleError(`[eql-assistant] import of '${entry}' from ${upstream} failed:`, err)
+  })
+  if (fromUpstream.copied.length > 0 || fromUpstream.failed.length > 0) {
+    logInfo(
+      `[eql-assistant] First launch on the '${CHANNEL}' channel: copied ${fromUpstream.copied.length} entries from EQ Legends Companion (${upstream}) → ${target}. The original app's dir is left untouched.`
+    )
+    return target
+  }
   const copied = seedFromLegacy(target, join(base, LEGACY_DIR_NAME))
   if (copied.length > 0) {
     logInfo(

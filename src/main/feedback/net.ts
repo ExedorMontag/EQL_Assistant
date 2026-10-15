@@ -64,7 +64,9 @@ import { E2E } from '../e2e'
  *
  * e.g. 'https://<apiId>.execute-api.us-east-1.amazonaws.com/v1/feedback'
  */
-const COMPILED_FEEDBACK_API_URL = 'https://pcy0z3xjp9.execute-api.us-east-1.amazonaws.com/v1/feedback'
+// EQL Assistant (fork): DARK. The original endpoint and bucket belonged to the upstream author's
+// AWS account; a fork must never upload its users' reports there.
+const COMPILED_FEEDBACK_API_URL = ''
 
 /**
  * The S3 bucket the presigned POST must target, and its region. EMPTY alongside the API URL:
@@ -74,7 +76,7 @@ const COMPILED_FEEDBACK_API_URL = 'https://pcy0z3xjp9.execute-api.us-east-1.amaz
  * The bucket name carries a `random_id` suffix for global uniqueness, so committing it leaks
  * no account id — that is the whole reason the name is randomized (§7.3).
  */
-export const FEEDBACK_S3_BUCKET = 'eqcompanion-logs-6c58f5cc'
+export const FEEDBACK_S3_BUCKET = ''
 /** Region of the bucket above. Owner decision, 2026-08-03. */
 export const FEEDBACK_S3_REGION = 'us-east-1'
 

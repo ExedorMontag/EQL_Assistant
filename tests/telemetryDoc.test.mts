@@ -158,16 +158,14 @@ test('SUBSTANCE: the page prints every bucket RANGE, from the schema’s own edg
   assert.ok(md.includes(String(TELEMETRY_BUFFER_CAP)), 'the page states how much is held locally')
 })
 
-test('THE LIT-BUILD SENTENCE is on the page, with the three facts that make it defensible', () => {
-  // This assertion used to read `/no build sends anything at all/`. It was written to FAIL on
-  // the commit that lit the endpoint, so the page could not keep saying nothing was sent after
-  // something was — the same forcing function SECURITY.md and README got.
+test('THE DARK-BUILD SENTENCE is on the page: this fork sends nothing', () => {
+  // EQL Assistant (fork): the upstream endpoint was removed, so the page must say this build
+  // does not send. Lighting a new endpoint must fail this test until the page is rewritten.
   const md = committed()
-  assert.match(md, /this build does send/i)
-  assert.match(md, /nothing is\s+sent before the notice/i, 'the consent gate is stated, not implied')
-  assert.match(md, /turning this off deletes/i, 'opt-out is total: the buffer AND the id')
+  assert.match(md, /this build does not send/i)
+  assert.doesNotMatch(md, /this build does send/i)
+  assert.match(md, /delete\s+everything waiting to be sent/i, 'opt-out is total: the buffer AND the id')
   assert.match(md, /Preferences/)
-  assert.doesNotMatch(md, /no build sends anything at all/i)
 })
 
 test('THE OPT-OUT NOTICE IS DISCLOSED — the one send that happens after you said stop', () => {

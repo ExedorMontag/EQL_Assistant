@@ -1,6 +1,6 @@
-appId: com.jmoyers.everquest-companion
-productName: EQ Legends Companion
-copyright: Copyright © 2026 Josh Moyers
+appId: com.exedormontag.eql-assistant
+productName: EQL Assistant
+copyright: Copyright © 2026 Josh Moyers (original EQ Legends Companion); fork changes © 2026 ExedorMontag
 
 directories:
   buildResources: build
@@ -161,8 +161,8 @@ npmRebuild: false
 # latest*.yml from the same owner/repo. `channel` is per-release (main vs latest).
 publish:
   provider: github
-  owner: jmoyers
-  repo: everquest-companion
+  owner: ExedorMontag
+  repo: EQL_Assistant
 
 win:
   target:
@@ -202,7 +202,12 @@ win:
     # exactly match the certificate subject CN (Azure profile eq-companion-public).
     # With it set, every downloaded update must carry a valid Authenticode
     # signature from this publisher or it is rejected before install.
-    publisherName: Joshua Moyers
+    #
+    # EQL Assistant (fork): REMOVED. The fork is not code-signed (the upstream
+    # certificate is Josh Moyers', not ours), and with a publisherName set every
+    # unsigned update would be rejected, so auto-update would never work. Put it
+    # back, set to the new certificate's CN, if this fork ever gets signing.
+    # publisherName: <certificate CN>
 
 # One-click installer (Discord model): double-click installs per-user under
 # %LOCALAPPDATA%\Programs (no UAC prompt), then launches. Friendly for friends
@@ -214,5 +219,5 @@ nsis:
   deleteAppDataOnUninstall: false
   createDesktopShortcut: true
   createStartMenuShortcut: true
-  shortcutName: EQ Legends Companion
-  artifactName: everquest-companion-Setup-${version}.${ext}
+  shortcutName: EQL Assistant
+  artifactName: eql-assistant-Setup-${version}.${ext}

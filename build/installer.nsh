@@ -225,7 +225,7 @@ Var pid
     # oneClick hides the details pane, so this is visible in install.log only when the build
     # sets ENABLE_LOGGING_ELECTRON_BUILDER (electron-builder.yml
     # `nsis.customNsisBinary.debugLogging: true`) - i.e. exactly the debug-log case.
-    DetailPrint "Wine/CrossOver detected - skipping the running-app check (process enumeration is not reliable in a bottle). Close EQ Legends Companion yourself if it is open."
+    DetailPrint "Wine/CrossOver detected - skipping the running-app check (process enumeration is not reliable in a bottle). Close EQL Assistant yourself if it is open."
   ${Else}
     !insertmacro IS_POWERSHELL_AVAILABLE
     !insertmacro _CHECK_APP_RUNNING
@@ -273,8 +273,9 @@ Var pid
 #    profile. It must stay in sync with package.json `name` (= Electron's
 #    app.getName(), there being no productName in package.json) and with the prod row of
 #    src/main/channel.ts. NEVER widen this: `%APPDATA%\eq-tools` is the pre-rename
-#    BACKUP that the one-time seed reads from, and `%APPDATA%\everquest-companion-dev`
-#    is the running dev app's data. Neither is ours to delete.
+#    BACKUP that the one-time seed reads from, `%APPDATA%\everquest-companion` is the
+#    ORIGINAL app's data (EQL Assistant is a fork and seeds from it, never owns it), and
+#    `%APPDATA%\eql-assistant-dev` is the running dev app's data. None is ours to delete.
 !macro customUnInstall
   # Build-time proof that the hook actually fires. `!ifmacrodef customUnInstall` lives in
   # uninstaller.nsh, which is only !included in the -DBUILD_UNINSTALLER pass, so this line
@@ -301,12 +302,12 @@ Var pid
   # Interactive uninstall. Yes (default button, and the /SD fallback) keeps everything.
   # Deliberately ONE line: this file has a history of "compiles clean, installer dies",
   # and a line continuation inside a macro body is not worth re-litigating.
-  MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON1|MB_TOPMOST|MB_SETFOREGROUND "Keep your settings and history?$\r$\n$\r$\nThey'll be restored if you reinstall EQ Legends Companion.$\r$\n(Choosing No deletes them permanently.)" /SD IDYES IDYES eqKeepUserData
+  MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON1|MB_TOPMOST|MB_SETFOREGROUND "Keep your settings and history?$\r$\n$\r$\nThey'll be restored if you reinstall EQL Assistant.$\r$\n(Choosing No deletes them permanently.)" /SD IDYES IDYES eqKeepUserData
 
   ${If} $installMode == "all"
     SetShellVarContext current
   ${EndIf}
-  RMDir /r "$APPDATA\everquest-companion"
+  RMDir /r "$APPDATA\eql-assistant"
   ${If} $installMode == "all"
     SetShellVarContext all
   ${EndIf}

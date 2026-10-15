@@ -1,10 +1,10 @@
 {
-  "name": "everquest-companion",
+  "name": "eql-assistant",
   "version": "0.1.0",
   "license": "FSL-1.1-MIT",
-  "description": "EverQuest Legends companion â€” real-time log analysis and Plane of Sky quest tracking",
+  "description": "EQL Assistant - a fork of EQ Legends Companion by Josh Moyers: real-time EverQuest Legends log analysis and Plane of Sky quest tracking",
   "main": "./out/main/index.js",
-  "author": "jmoyers",
+  "author": "ExedorMontag (fork of everquest-companion by Josh Moyers)",
   "private": true,
   "scripts": {
     "deps:electron": "node node_modules/electron/install.js",

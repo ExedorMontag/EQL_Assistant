@@ -403,8 +403,8 @@ export default function FeedbackDialog({ open, onClose, prefill }: FeedbackDialo
           <Stack spacing={1.5}>
             {dark && (
               <Alert severity="info" variant="standard" data-testid="feedback-unavailable">
-                Sending isn’t available in this build - it has no feedback endpoint. You can still
-                save a copy of your log slice below and send it another way.
+                Sending isn’t available in EQL Assistant yet. Please open an issue on the project’s
+                GitHub page instead - you can save a copy of your log slice below and attach it there.
               </Alert>
             )}
             <TypeToggle value={state.fields.type} onChange={state.setType} />

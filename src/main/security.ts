@@ -77,15 +77,24 @@ export const EXTERNAL_LINK_ALLOWLIST: readonly ExternalLinkRule[] = [
   { host: 'eqlwiki.com' },
   { host: 'www.eqlwiki.com' },
   { host: 'wiki.project1999.com' },
+  { host: 'github.com', pathPrefix: '/ExedorMontag/EQL_Assistant' },
+  // EQL Assistant is a fork: the credit in Preferences → Thanks links to the original project.
   { host: 'github.com', pathPrefix: '/jmoyers/everquest-companion' }
 ]
 
-const ALLOWED_LINK_RULES = new Map(EXTERNAL_LINK_ALLOWLIST.map((r) => [r.host, r] as const))
+/** Rules grouped by host: a host may carry several scoped rules (github.com: this fork and its
+ *  upstream), and a URL passes when ANY rule for its host accepts it. */
+const ALLOWED_LINK_RULES = new Map<string, ExternalLinkRule[]>()
+for (const r of EXTERNAL_LINK_ALLOWLIST) {
+  const rules = ALLOWED_LINK_RULES.get(r.host) ?? []
+  rules.push(r)
+  ALLOWED_LINK_RULES.set(r.host, rules)
+}
 
 /**
  * Is `pathname` the allowed subtree itself, or something inside it?
  *
- * SEGMENT-AWARE, never a bare `startsWith`: `/jmoyers/everquest-companion-evil/x` shares the
+ * SEGMENT-AWARE, never a bare `startsWith`: `/ExedorMontag/EQL_Assistant-evil/x` shares the
  * prefix's characters and is a DIFFERENT repo, so the boundary is the separator. The prefix
  * itself passes (the repo's own front page is the same page the releases link's parent is).
  *
@@ -138,10 +147,10 @@ export function allowedExternalUrl(raw: unknown): string | null {
   if (u.protocol !== 'https:') return null
   if (u.username !== '' || u.password !== '') return null
   if (u.port !== '') return null
-  const rule = ALLOWED_LINK_RULES.get(u.hostname)
-  if (!rule) return null
-  if (rule.pathPrefix !== undefined && !isUnderPathPrefix(u.pathname, rule.pathPrefix)) return null
-  return u.toString()
+  const rules = ALLOWED_LINK_RULES.get(u.hostname)
+  if (!rules) return null
+  const ok = rules.some((rule) => rule.pathPrefix === undefined || isUnderPathPrefix(u.pathname, rule.pathPrefix))
+  return ok ? u.toString() : null
 }
 
 /** Where the app's own pages live, for `isInternalPageUrl`. */

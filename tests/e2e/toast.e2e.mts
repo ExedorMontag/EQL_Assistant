@@ -156,7 +156,7 @@ async function stepIntroduction(app: ElectronApplication, toast: Page): Promise<
   if (!check('a fresh install is INTRODUCED to the celebration overlay (one card, unprompted)', cards.length === 1, `${cards.length} card(s)`)) {
     return
   }
-  check('…and the card names the program that put it there', cards[0].includes('EQ Legends Companion'), cards[0])
+  check('…and the card names the program that put it there', cards[0].includes('EQL Assistant'), cards[0])
   check('…saying the window is not EverQuest’s', cards[0].includes('not to EverQuest'), cards[0])
   check('…and pointing at the switch that turns it off', cards[0].includes('Preferences'), cards[0])
   check('…with a source label on the card chrome', (await countOf(toast, '[data-testid="toast-source-label"]')) === 1)

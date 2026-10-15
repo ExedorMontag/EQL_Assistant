@@ -1,5 +1,7 @@
 # AGENTS.md — EQ Legends Companion
 
+> **FORK: this repo is EQL Assistant. Read `FORK.md` first.**
+
 Distilled operating manual. Per-task history lives in `git log` and Linear;
 this file holds only repeatable rules and load-bearing design. Long-form war
 stories were MOVED verbatim to `docs/agents-archive.md` (JOS-252) — a cut

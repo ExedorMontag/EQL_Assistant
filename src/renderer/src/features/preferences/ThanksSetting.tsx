@@ -56,6 +56,31 @@ export const IMAGE_CREDITS: readonly Credit[] = [
   }
 ]
 
+/** The project this fork is built on. Both links pass `EXTERNAL_LINK_ALLOWLIST` (security.ts). */
+export const ORIGIN_URL = 'https://github.com/jmoyers/everquest-companion'
+export const FORK_URL = 'https://github.com/ExedorMontag/EQL_Assistant'
+
+/** EQL Assistant is a fork. Say so, by name, where a user can find it. */
+export function OriginSetting(): JSX.Element {
+  return (
+    <Stack spacing={1.25} data-testid="prefs-origin">
+      <Typography variant="body2">
+        EQL Assistant is a fork of EQ Legends Companion, created by Josh Moyers. Nearly everything
+        in this app is his work - the log reading, the DPS meter, the overlays, the quest and loot
+        tracking. This version keeps it available and adds its own tweaks on top.
+      </Typography>
+      <Stack spacing={0.25}>
+        <Link href={ORIGIN_URL} target="_blank" rel="noreferrer" variant="body2" data-testid="prefs-origin-link">
+          EQ Legends Companion by Josh Moyers
+        </Link>
+        <Link href={FORK_URL} target="_blank" rel="noreferrer" variant="body2" data-testid="prefs-fork-link">
+          EQL Assistant on GitHub
+        </Link>
+      </Stack>
+    </Stack>
+  )
+}
+
 export function ThanksSetting(): JSX.Element {
   return (
     <Stack spacing={1.25} data-testid="prefs-thanks">
@@ -101,6 +126,12 @@ export function thanksSection(): PrefSection {
     label: 'Thanks',
     icon: <FavoriteIcon fontSize="small" />,
     items: [
+      {
+        id: 'origin',
+        label: 'Where this app comes from',
+        keywords: 'thanks credit credits fork original author josh moyers eq legends companion github source',
+        content: <OriginSetting />
+      },
       {
         id: 'image-credits',
         label: 'Where the art comes from',

@@ -157,28 +157,20 @@ test('a malformed bucket or region can never produce a match', () => {
 // pinned literally — re-applying the root mints a new one, and a test that fails on a redeploy
 // teaches people to edit tests.
 
-test('the compiled endpoint is https on our own API, in our own region', () => {
-  assert.equal(feedbackEndpointConfigured(), true)
-  const u = new URL(net.FEEDBACK_API_URL)
-  assert.equal(u.protocol, 'https:')
-  assert.match(u.hostname, /^[a-z0-9]+\.execute-api\.us-east-1\.amazonaws\.com$/)
-  assert.equal(u.pathname, '/v1/feedback')
-  assert.equal(u.username, '')
-  assert.equal(u.search, '')
+// EQL Assistant (fork): the build is DARK. The upstream endpoint and bucket belonged to the
+// original author's AWS account, so a fork ships with neither and can upload nowhere.
+test('THE FORK IS DARK: no compiled feedback endpoint and no bucket', () => {
+  assert.equal(net.FEEDBACK_API_URL, '')
+  assert.equal(feedbackEndpointConfigured(), false)
+  assert.equal(net.FEEDBACK_S3_BUCKET, '')
   assert.equal(net.FEEDBACK_S3_REGION, 'us-east-1')
-  assert.match(net.FEEDBACK_S3_BUCKET, /^eqcompanion-logs-[0-9a-f]+$/)
 })
 
-test('the BOUND allowedUploadUrl accepts our bucket and refuses every other host', () => {
-  const { virtualHost, pathHost } = uploadEndpoints(net.FEEDBACK_S3_BUCKET, net.FEEDBACK_S3_REGION)
-  assert.equal(allowedUploadUrl(`https://${virtualHost}/`), `https://${virtualHost}/`)
-  assert.equal(
-    allowedUploadUrl(`https://${pathHost}/${net.FEEDBACK_S3_BUCKET}`),
-    `https://${pathHost}/${net.FEEDBACK_S3_BUCKET}`
-  )
-  // The suffix attack, against the REAL name this build ships with.
-  assert.equal(allowedUploadUrl(`https://${virtualHost}.evil.com/`), null)
-  assert.equal(allowedUploadUrl('https://eqcompanion-logs-9f3a2c17.s3.us-east-1.amazonaws.com/'), null)
+test('a dark build accepts NO upload url at all', () => {
+  const { virtualHost, pathHost } = uploadEndpoints('eqcompanion-logs-9f3a2c17', 'us-east-1')
+  assert.equal(allowedUploadUrl(`https://${virtualHost}/`), null)
+  assert.equal(allowedUploadUrl(`https://${pathHost}/eqcompanion-logs-9f3a2c17`), null)
+  assert.equal(allowedUploadUrl('https://eqcompanion-logs-6c58f5cc.s3.us-east-1.amazonaws.com/'), null)
   assert.equal(allowedUploadUrl('http://127.0.0.1:8477/devstack/upload/x'), null)
 })
 

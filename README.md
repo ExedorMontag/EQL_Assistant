@@ -1,4 +1,10 @@
-# EQ Legends Companion
+# EQL Assistant
+
+**EQL Assistant is a fork of [EQ Legends Companion](https://github.com/jmoyers/everquest-companion)
+by Josh Moyers.** Nearly all of this app is his work, and the credit belongs to him. This
+version adds its own tweaks, new features and cosmetic changes, and is here to make sure the
+app stays available to EverQuest Legends players now that the original is no longer being
+maintained.
 
 A Windows desktop companion for **EverQuest Legends**. It reads the log file the game
 already writes and turns it into live, useful views — a DPS meter, floating overlays,
@@ -32,8 +38,8 @@ Everything is per-character; switch characters and the app re-reads that log.
 **Requires 64-bit Windows 10 or 11.** Windows 8.1 and older can't run it — the installer
 checks and stops with a message rather than leaving you an app that won't start.
 
-1. Download `everquest-companion-Setup-<version>.exe` from the
-   [**Releases**](https://github.com/jmoyers/everquest-companion/releases) page.
+1. Download `eql-assistant-Setup-<version>.exe` from the
+   [**Releases**](https://github.com/ExedorMontag/EQL_Assistant/releases) page.
 2. Run it. It's a one-click, per-user install (like Discord) — no admin prompt, no
    wizard. It adds a Start-menu and desktop shortcut.
 3. In EverQuest, type `/log on`.
@@ -45,21 +51,19 @@ install lives somewhere else, point it at the right folder in **Settings**.
 Overlays sit on top of the game in **windowed** or **borderless** mode. Exclusive
 fullscreen can't be overlaid by anything, so use borderless if you want them.
 
-### Code signing
+### "Windows protected your PC"
 
-The installer is code-signed as **Joshua Moyers** through Microsoft's Artifact
-Signing service, and auto-updates are verified against that signature before they
-install. If SmartScreen still shows a "Windows protected your PC" warning while
-the certificate is new, click **More info**, then **Run anyway** — you only ever
-see it once.
+The installer is not code-signed yet, so Windows SmartScreen may warn you the first time.
+Click **More info**, then **Run anyway**. Updates are still checked against the checksum
+published with each release before they install.
 
-### Already have an old `eq-tools` install?
+### Coming from EQ Legends Companion?
 
-The app was renamed from `eq-tools` to `everquest-companion`, which Windows treats as a
-different app — the new installer will *not* replace the old one, and the old install
-will never auto-update again. Uninstall **eq-tools** once from Settings → Apps, then run
-the new installer. Your settings, alerts and sound packs carry over automatically on
-first launch (the old folder is left in place, untouched, as a backup).
+EQL Assistant installs as its own app, beside the original rather than over it. The first
+time it starts, it **copies** your settings, alerts, sound packs and history from EQ Legends
+Companion, so you pick up exactly where you left off. The original's folder is left
+untouched. Once you're happy, you can uninstall EQ Legends Companion from Settings → Apps
+(choose **Yes** to keep its settings if it asks; EQL Assistant has its own copy either way).
 
 ## Updates
 
@@ -72,7 +76,7 @@ apply now, or it installs the next time you quit.
 - **Sound & voice packs.** Alert sounds come from packs. One voice pack ships with the
   app and installs itself on first launch, and you can browse and install ~350 more from
   inside the app (**Alerts → Sound packs…**). To add your own: drop a folder into
-  `%AppData%\everquest-companion\soundpacks\<your-pack>\` containing your `.wav`/`.mp3`/`.ogg`
+  `%AppData%\eql-assistant\soundpacks\<your-pack>\` containing your `.wav`/`.mp3`/`.ogg`
   files and a small `manifest.json` naming them — it shows up in every sound picker. Want
   your own Final Fantasy fanfare on a raid kill? That's the whole job.
 - **Share alerts.** Any alert (or all of them at once) copies to a short paste-safe
@@ -84,58 +88,18 @@ apply now, or it installs the next time you quit.
 
 ## Feedback
 
-**Send feedback** in the nav drawer (also in **Settings → Feedback**) opens a dialog with
-two choices — **Feature request** or **Bug report** — and one box to type in. That box is
-the only thing you fill out; there's no title field and no contact field to fill in.
+Found a bug or have an idea? Open an
+[issue on GitHub](https://github.com/ExedorMontag/EQL_Assistant/issues).
 
-A report carries exactly this:
+The original app's in-app **Send feedback** dialog sent reports to a server run by its
+author. That server is not part of this fork, so in EQL Assistant the dialog can't send
+anything yet.
 
-- the type (feature or bug) and the description you typed;
-- what the app knows about *itself* — app version, release channel, `win32`, your OS
-  build number, CPU architecture, and the Electron/Chrome/Node versions it's running on;
-- an anonymous per-install id, which exists only to rate-limit and to link your follow-up
-  report to your earlier one. It's a random UUID in a file you own, tied to nothing.
-
-**It does not contain your character name, your server, your EverQuest install path, your
-Windows user name, or your machine name.** None of those are collected, and none of your
-gameplay, progress, or settings ride along.
-
-**Bug reports can attach a slice of your EverQuest log**, and this is the one place log
-contents leave your machine. It's opt-in (ticked by default for bugs, and never offered
-for feature requests), covers the last 15, 30, or 60 minutes, and it is **scrubbed before
-you ever see it**: chat, tells, group and guild messages, and `/who` output are dropped
-by the same filter that governs the log fixtures committed to this repo. Your own
-character name, zones, spells, combat lines, and structural events like group joins
-stay — that's what makes a bug reproducible.
-
-The dialog shows you the slice, expanded, before you send anything: how many lines it is,
-the exact time span, how many lines the scrub removed, and its compressed size. **Save a
-copy…** writes every byte to a file of your choosing, so you can read the whole thing
-first rather than trusting a preview. Nothing is uploaded until you press Send.
-
-**Want a reply?** Put your email or Discord handle in the message itself. That's the only
-way we'll have to reach you, and leaving it out is a perfectly normal way to file.
-
-After a successful send you get a **report id**. It's worth keeping: quote it in a
-[GitHub issue](https://github.com/jmoyers/everquest-companion/issues) and we can delete
-that report's log slice and any contact details you included. See
-[`SECURITY.md`](SECURITY.md) for how long each piece is kept.
-
-If you're offline, the report is saved and sent the next time the app runs with a working
-connection.
-
-**Anonymous usage counts.** Separately from feedback, the app sends anonymous counts —
-session lengths, which views and features get used, whether an update or a voice install
-worked. It's on by default and a one-line bar tells you so the first time you run it;
-nothing is sent before that bar has appeared. **Opt out** there, or the switch in
-**Preferences → Usage analytics**, turns it off and deletes both the buffered events and
-your anonymous id on the spot. There is no free-text field in what it sends, so your
-character names, zones, chat, alert names, paths and log lines cannot travel in it —
-[`TELEMETRY.md`](TELEMETRY.md) lists every event and field, generated from the schema, and
-the same Preferences pane shows you the exact JSON waiting to go and the last batch that
-left. The id it uses is deliberately **not** your feedback install id: the two data sets
-can't be joined, by us or by anyone else. [`SECURITY.md`](SECURITY.md#usage-analytics) has
-the retention details.
+**Usage counts.** The original app sent anonymous usage counts to its author. **This fork
+sends nothing**: the address was removed, and nothing leaves your machine.
+[`TELEMETRY.md`](TELEMETRY.md) describes what the code is able to collect, and
+**Preferences → Usage analytics** still shows it and has the off switch. If a future
+version starts counting daily users, the release notes will say so first.
 
 ## Development
 
@@ -145,9 +109,14 @@ Contributions welcome. Everything about building, testing, and the architecture 
 ## License
 
 FSL-1.1-MIT (Functional Source License, converting to MIT after two years) — see
-[`LICENSE`](LICENSE). Copyright (c) 2026 Josh Moyers.
+[`LICENSE`](LICENSE). The original EQ Legends Companion is Copyright (c) 2026 Josh Moyers,
+and this fork is distributed under his license terms.
 
 ## Thanks
+
+First and foremost to **Josh Moyers**, who built
+[EQ Legends Companion](https://github.com/jmoyers/everquest-companion), which this app is a
+fork of. The same credit is in the app, under **Preferences → Thanks**.
 
 The item icons and raid-boss portraits this app draws come from two volunteer-run
 EverQuest wikis — [**wiki.project1999.com**](https://wiki.project1999.com/) (boss

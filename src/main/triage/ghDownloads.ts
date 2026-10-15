@@ -25,7 +25,7 @@ import type { TriageDownloadRow, TriageDownloads } from '../../shared/triage'
 
 /** The repo the app publishes to — electron-builder.yml's `publish` block, same owner/repo. */
 const RELEASES_URL =
-  'https://api.github.com/repos/jmoyers/everquest-companion/releases?per_page=100'
+  'https://api.github.com/repos/ExedorMontag/EQL_Assistant/releases?per_page=100'
 
 /** The readout must not sit and wait on GitHub; the database half is the point of the screen. */
 const TIMEOUT_MS = 5_000

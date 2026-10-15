@@ -275,10 +275,10 @@ test('the introduction card NAMES THE APP and points at the way out', () => {
   assert.equal(p.kind, 'intro')
   // The report is "I could not tell what this window was", so the app's name in the title is the
   // literal fix — not a decoration to be reworded away.
-  assert.match(p.title, /EQ Legends Companion/)
+  assert.match(p.title, /EQL Assistant/)
   assert.match(p.subtitle ?? '', /appear here/)
   // …and the body says whose window it is, and both exits: the × on the card, and Preferences.
-  assert.match(TOAST_INTRO_BODY, /EQ Legends Companion/)
+  assert.match(TOAST_INTRO_BODY, /EQL Assistant/)
   assert.match(TOAST_INTRO_BODY, /not to EverQuest/)
   assert.match(TOAST_INTRO_BODY, /Preferences/)
 })

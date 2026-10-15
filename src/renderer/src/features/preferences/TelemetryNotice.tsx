@@ -37,9 +37,13 @@ export function TelemetryNotice({ onOpenDetails }: { onOpenDetails: () => void }
 
   useEffect(() => {
     let alive = true
-    void window.eq.getTelemetryPrefs().then((prefs) => {
-      if (alive) setShow(!prefs.noticeShown)
-    })
+    // EQL Assistant (fork): a build with no endpoint compiled in sends nothing, so a bar saying
+    // "we collect usage data" would be untrue. It shows only when there is somewhere to send.
+    void Promise.all([window.eq.getTelemetryPrefs(), window.eq.getTelemetryPayload()]).then(
+      ([prefs, payload]) => {
+        if (alive) setShow(!prefs.noticeShown && payload.endpointConfigured)
+      }
+    )
     return () => {
       alive = false
     }
